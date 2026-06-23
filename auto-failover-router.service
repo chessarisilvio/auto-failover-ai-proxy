@@ -1,0 +1,15 @@
+[Unit]
+Description=Auto-failover AI proxy router
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/Scrivania/Hub/lavoro-tech/auto-failover-ai-proxy
+ExecStart=/usr/bin/env python3 %h/Scrivania/Hub/lavoro-tech/auto-failover-ai-proxy/proxy_router.py
+Environment=LOCAL_PROXY_HOST=localhost LOCAL_PROXY_PORT=8090 CLOUD_ENDPOINT=https://api.openai.com/v1 HEALTH_CHECK_SCRIPT=%h/Scrivania/Hub/lavoro-tech/auto-failover-ai-proxy/health_check.sh REQUEST_TIMEOUT=30 PORT=8080 FLASK_DEBUG=false
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,10 @@
+[Unit]
+Description=Health check for AI proxy
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/Scrivania/Hub/lavoro-tech/auto-failover-ai-proxy
+ExecStart=%h/Scrivania/Hub/lavoro-tech/auto-failover-ai-proxy/health_check.sh
+Environment=PROXY_HOST=localhost PROXY_PORT=8090 THRESHOLD_MS=200
