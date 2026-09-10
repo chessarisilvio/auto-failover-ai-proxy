@@ -21,9 +21,10 @@ if [ $curl_exit_code -ne 0 ]; then
     exit 1
 fi
 
-# Convert seconds to milliseconds (multiply by 1000 and round to nearest integer)
-# Using bc for floating point arithmetic, then convert to integer
-response_time_ms=$(echo "$response_time_seconds * 1000" | bc | cut -d'.' -f1)
+# Convert seconds to milliseconds (truncate to integer).
+# awk instead of bc+cut: bc drops the leading zero for values <1 (".295"
+# instead of "0.295"), and cut -d'.' -f1 then yields an empty string.
+response_time_ms=$(awk -v t="$response_time_seconds" 'BEGIN{printf "%d", t*1000}')
 
 # Compare with threshold
 if [ "$response_time_ms" -le "$THRESHOLD_MS" ]; then
